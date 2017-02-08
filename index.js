@@ -34,17 +34,20 @@ app.use('/public', express.static(path.join(__dirname, '/public')));
 var mountPath = process.env.PARSE_MOUNT || '/parse';
 app.use(mountPath, api);
 
-app.all('*', function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'accept, content-type, x-parse-application-id, x-parse-rest-api-key, x-parse-session-token');
-     // intercept OPTIONS method
-    if ('OPTIONS' == req.method) {
-      res.send(200);
-    }
-    else {
-      next();
-    }
+app.use(function (req, res, next) {
+
+    res.set({ // since there is no res.header class in Parse, we use the equivalent to set the response headers
+        'Access-Control-Allow-Origin': '*/*',
+        'Access-Control-Allow-Credentials': true,
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, X-Parse-Session-Token'
+    });
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Methods','GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers','Origin, X-Requested-With, Content-Type, Accept, X-Parse-Session-Token');
+
+    next();
 });
 
 // Parse Server plays nicely with the rest of your web routes
