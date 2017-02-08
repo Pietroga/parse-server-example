@@ -47,7 +47,7 @@ app.all('*', function(req, res, next) {
 
 // Parse Server plays nicely with the rest of your web routes
 app.get('/', function(req, res) {
-  res.status(200).send('I dream of being a website.  Pietro');
+  res.status(200).send('I dream of being a website.  Pietro v2');
 });
 
 // There will be a test page available on the /test path of your server url
